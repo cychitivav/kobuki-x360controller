@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<robot name="kobuki">
+    <link name="base_footprint"/>
+
+    <!-- Chasis -->
+    <joint name="fixed_joint" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="chasis"/>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    </joint>
+    
+    <link name="chasis">
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="8.066"/>
+            <inertia ixx="0.06418" ixy="0.0" ixz="-0.00192" iyy="0.06418" iyz="0.0" izz="0.11906"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://kobuki_x360controller/meshes/kobuki.stl"/>
+            </geometry>
+            <material name="black_widow">
+                <color rgba="0.01 0.01 0.01 0.8"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://kobuki_x360controller/meshes/kobuki.stl"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Right wheel -->
+    <joint name="j_wheel_r" type="continuous">
+        <parent link="chasis"/>
+        <child link="wheel_r"/>
+        <axis xyz="0 0 1"/>
+        <origin xyz="0 -0.115 0" rpy="1.57079 0 0"/>
+    </joint>
+
+    <transmission name="r_wheel_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j_wheel_r">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="r_motor">
+            <hardwareInterface>VelocityJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    
+    <link name="wheel_r">
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="0.084"/>
+            <inertia ixx="0.00002" ixy="0.0" ixz="0.0" iyy="0.00002" iyz="0.0" izz="0.00005"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://kobuki_x360controller/meshes/wheel.stl"/>
+            </geometry>
+            <material name="blue_king">
+                <color rgba="0.0 0.0 1.0 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://kobuki_x360controller/meshes/wheel.stl"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Left wheel -->
+    <joint name="j_wheel_l" type="continuous">
+        <parent link="chasis"/>
+        <child link="wheel_l"/>
+        <axis xyz="0 0 1"/>
+        <origin xyz="0 0.115 0" rpy="1.57079 0 0"/>
+    </joint>
+
+    <transmission name="l_wheel_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j_wheel_l">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="l_motor">
+        <hardwareInterface>VelocityJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    
+    
+    <link name="wheel_l">
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="0.084"/>
+            <inertia ixx="0.00002" ixy="0.0" ixz="0.0" iyy="0.00002" iyz="0.0" izz="0.00005"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://kobuki_x360controller/meshes/wheel.stl"/>
+            </geometry>
+            <material name="blue_king">
+                <color rgba="0.0 0.0 1.0 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://kobuki_x360controller/meshes/wheel.stl"/>
+            </geometry>
+        </collision>
+    </link>   
+
+
+    <!-- Gazebo Plugins -->
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
+</robot>

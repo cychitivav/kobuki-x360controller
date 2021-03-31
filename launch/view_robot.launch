@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Load model -->
+    <arg name="robot_name" default="/"/>
+    <arg name="model" default="$(find kobuki_x360controller)/urdf/robot.urdf"/>
+
+    <!-- Parser -->
+    <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+
+    <!-- Convert joint states to TF transforms for rviz -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_sta_pub"/>
+
+    <!-- Launch rviz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find kobuki_x360controller)/rviz/rviz.rviz"/>
+
+    <!-- Launch Gazebo-->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="worlds/empty.world"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="debug" value="false"/>
+        <arg name="paused" value="false"/>
+        <arg name="recording" value="false"/>
+    </include>
+
+    <!-- Robot initial pose -->
+    <arg name="x" default="0.0"/>
+    <arg name="y" default="0.0"/>
+    <arg name="z" default="0.01"/>
+    <arg name="roll" default="0.0"/>
+    <arg name="pitch" default="0.0"/>
+    <arg name="yaw" default="0.0"/>
+
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_test_robot" respawn="false" ns="$(arg robot_name)" args="-x $(arg x) -y $(arg y) -z $(arg z)
+          -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)
+          -urdf 
+          -param robot_description
+          -model test_robot" />
+
+    <!-- Load joint controller configuration -->
+    <rosparam file="$(find kobuki_x360controller)/config/controller.yaml" command="load" />
+    <!-- Load controller -->
+    <node name="Robot_controller" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/" args=  "joint_state_controller 
+                  left_wheel_ctrl
+                  right_wheel_ctrl" />
+
+    <!-- Node python scripts -->
+    <node name="cinematic_model" pkg="kobuki_x360controller" type="model_cinematic.py"/>
+    <node name="x360_controller" pkg="kobuki_x360controller" type="xbox_controller.py"/>
+</launch>
