@@ -37,7 +37,8 @@
         <parent link="chasis"/>
         <child link="wheel_r"/>
         <axis xyz="0 0 1"/>
-        <origin xyz="0 -0.115 0" rpy="1.57079 0 0"/>
+        <origin xyz="0 -0.115 0" rpy="$(eval pi/2) 0 0"/>
+        <limit effort="1000.0" velocity="$(eval 1.0/0.0352)"/>
     </joint>
 
     <transmission name="r_wheel_trans">
@@ -69,7 +70,7 @@
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://kobuki_x360controller/meshes/wheel.stl"/>
+                <sphere radius="0.0352"/>
             </geometry>
         </collision>
     </link>
@@ -79,7 +80,8 @@
         <parent link="chasis"/>
         <child link="wheel_l"/>
         <axis xyz="0 0 1"/>
-        <origin xyz="0 0.115 0" rpy="1.57079 0 0"/>
+        <origin xyz="0 0.115 0" rpy="$(eval pi/2) 0 0"/>
+        <limit effort="1000.0" velocity="$(eval 1.0/0.0352)"/>
     </joint>
 
     <transmission name="l_wheel_trans">
@@ -112,7 +114,7 @@
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://kobuki_x360controller/meshes/wheel.stl"/>
+                <sphere radius="0.0352"/>
             </geometry>
         </collision>
     </link>   

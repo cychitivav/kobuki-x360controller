@@ -7,7 +7,7 @@ import numpy as np
 
 
 def publisher_x360():
-    with Xbox360Controller(0, axis_threshold=0.1) as controller:
+    with Xbox360Controller(0, axis_threshold=0) as controller:
         # Left and right axis move event
         controller.axis_l.when_moved = on_axis_moved
         controller.axis_r.when_moved = on_axis_moved
@@ -18,8 +18,8 @@ def on_axis_moved(axis):
     msg = Twist()
 
     if axis.name == "axis_l":
-        msg.linear.x = axis.y
-        msg.linear.y = axis.x
+        msg.linear.x = axis.y/0.0352
+        msg.linear.y = axis.x/0.0352
 
     if axis.name == "axis_r":
         msg.angular.z = axis.x*np.pi
