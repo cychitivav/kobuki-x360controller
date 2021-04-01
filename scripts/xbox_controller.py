@@ -7,12 +7,16 @@ import numpy as np
 
 
 def publisher_x360():
-    with Xbox360Controller(0, axis_threshold=0) as controller:
-        # Left and right axis move event
-        controller.axis_l.when_moved = on_axis_moved
-        controller.axis_r.when_moved = on_axis_moved
+    while not rospy.is_shutdown():
+        try:
+            with Xbox360Controller(0, axis_threshold=0) as controller:
+                # Left and right axis move event
+                controller.axis_l.when_moved = on_axis_moved
+                controller.axis_r.when_moved = on_axis_moved
 
-        signal.pause()
+                signal.pause()
+        except Exception:
+            pass
 
 def on_axis_moved(axis):
     msg = Twist()
