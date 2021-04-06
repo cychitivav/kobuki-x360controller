@@ -13,6 +13,9 @@ def publisher_x360():
                 # Left and right axis move event
                 controller.axis_l.when_moved = on_axis_moved
                 controller.axis_r.when_moved = on_axis_moved
+                
+                # Button stop
+                controller.button_a.when_released = on_button_released
 
                 signal.pause()
         except Exception:
@@ -22,14 +25,18 @@ def on_axis_moved(axis):
     msg = Twist()
 
     if axis.name == "axis_l":
-        msg.linear.x = axis.y/0.0352
-        msg.linear.y = axis.x/0.0352
+        msg.linear.x = axis.y
+        msg.linear.y = axis.x
 
     if axis.name == "axis_r":
         msg.angular.z = axis.x*np.pi
 
     pub.publish(msg)
-        
+    print(msg)
+
+def on_button_released(button):
+    while not rospy.is_shutdown():
+        rospy.signal_shutdown("Shutting down")
 
 if __name__ == "__main__":
     rospy.init_node("x360_controller", anonymous=True) 
