@@ -37,8 +37,8 @@
         <parent link="chasis"/>
         <child link="right_wheel"/>
         <axis xyz="0 0 1"/>
-        <origin xyz="0 -0.115 0" rpy="$(eval pi/2) 0 0"/>
-        <limit effort="1000.0" velocity="$(eval 1.0/0.0352)"/>
+        <origin xyz="0 -0.115 0" rpy="${pi/2} 0 0"/>
+        <limit effort="1000.0" velocity="${1.0/0.0352}"/>
     </joint>
 
     <link name="right_wheel">
@@ -78,8 +78,8 @@
         <parent link="chasis"/>
         <child link="left_wheel"/>
         <axis xyz="0 0 1"/>
-        <origin xyz="0 0.115 0" rpy="$(eval pi/2) 0 0"/>
-        <limit effort="1000.0" velocity="$(eval 1.0/0.0352)"/>
+        <origin xyz="0 0.115 0" rpy="${pi/2} 0 0"/>
+        <limit effort="1000.0" velocity="${1.0/0.0352}"/>
     </joint>
 
     <link name="left_wheel">

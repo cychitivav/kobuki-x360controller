@@ -30,6 +30,6 @@
                   right_wheel_ctrl" />
 
     <!-- Node python scripts -->
-    <node name="cinematic_model" pkg="kobuki_x360controller" type="model_cinematic.py"/>
-    <node name="x360_controller" pkg="kobuki_x360controller" type="xbox_controller.py"/>
+    <node name="cinematic_model" pkg="kobuki_x360controller" output="screen" type="model_cinematic.py"/>
+    <node name="x360_controller" pkg="kobuki_x360controller" output="screen" type="xbox_controller.py"/>
 </launch>

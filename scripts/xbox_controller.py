@@ -22,21 +22,28 @@ def publisher_x360():
             pass
 
 def on_axis_moved(axis):
-    msg = Twist()
+    while not rospy.is_shutdown():
+        msg = Twist()
 
-    if axis.name == "axis_l":
-        msg.linear.x = axis.y
-        msg.linear.y = axis.x
+        if axis.name == "axis_l":
+            msg.linear.x = axis.y
+            msg.linear.y = axis.x
 
-    if axis.name == "axis_r":
-        msg.angular.z = axis.x*np.pi
+        if axis.name == "axis_r":
+            msg.angular.z = axis.x
 
-    pub.publish(msg)
-    print(msg)
+        pub.publish(msg)
+        print(msg)
 
 def on_button_released(button):
     while not rospy.is_shutdown():
-        rospy.signal_shutdown("Shutting down")
+        rospy.loginfo("Stopping")
+        msg = Twist()
+        
+        pub.publish(msg)
+
+        rospy.loginfo("Shutting down")
+        rospy.signal_shutdown("Request shutdown")
 
 if __name__ == "__main__":
     rospy.init_node("x360_controller", anonymous=True) 
