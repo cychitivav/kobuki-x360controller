@@ -2,7 +2,7 @@
 
 joint_state_controller:
   type: joint_state_controller/JointStateController
-  publish_rate: 100
+  publish_rate: 30
 
 # Velocity controllers
 left_wheel_ctrl:
