@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import signal
 import rospy
 from xbox360controller import Xbox360Controller
 from geometry_msgs.msg  import Twist
@@ -9,41 +8,39 @@ import numpy as np
 class x360controller():
     def __init__(self):
         self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-        
-        while not rospy.is_shutdown():
-            try:
-                with Xbox360Controller(0, axis_threshold=0.2) as controller:
-                    # Left and right axis move event
-                    controller.axis_l.when_moved = self.on_axis_moved
-                    controller.axis_r.when_moved = self.on_axis_moved
+        try:
+            controller = Xbox360Controller()
+                
+            # Left and right axis move event
+            controller.axis_l.when_moved = self.movement
 
-                    # Button stop
-                    controller.button_a.when_released = self.on_button_released
+            # Button stop and kill
+            controller.button_a.when_released = self.kill
+            controller.button_b.when_released = self.stop
+        except Exception:
+            rospy.logwarn("x360 controller disconnected")
+            rospy.signal_shutdown("controller disconnected")
 
-                    signal.pause()
-            except Exception:
-                pass
+    def movement(self, axis):
+        if not rospy.is_shutdown():   
+            msg = Twist()
 
-    def on_axis_moved(self, axis):
-        msg = Twist()
-
-        if axis.name == "axis_l":
             msg.linear.x = axis.y
-            msg.linear.y = axis.x
+            msg.angular.z = axis.x*np.pi
 
-        if axis.name == "axis_r":
-            msg.angular.z = axis.x
+            self.pub.publish(msg)
 
-        self.pub.publish(msg)
-        print(msg)
+    def kill(self, button):
+        if not rospy.is_shutdown():   
+            rospy.loginfo("Shutting down")
+            rospy.signal_shutdown("Request shutdown")
 
-    def on_button_released(self, button):
-        rospy.loginfo("Stopping")
-        msg = Twist()
-        self.pub.publish(msg)
-
-        rospy.loginfo("Shutting down")
-        rospy.signal_shutdown("Request shutdown")
+    def stop(self, button):
+        if not rospy.is_shutdown():   
+            rospy.loginfo("Stopping")
+            msg = Twist()
+            self.pub.publish(msg)
+        
 
 if __name__ == "__main__":
     rospy.init_node("x360_controller", anonymous=True) 

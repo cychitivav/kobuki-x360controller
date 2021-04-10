@@ -30,6 +30,7 @@
                   right_wheel_ctrl" />
 
     <!-- Node python scripts -->
-    <node name="cinematic_model" pkg="kobuki_x360controller" output="screen" type="model_cinematic.py"/>
+    <node name="kinematic_model" pkg="kobuki_x360controller" output="screen" type="kinematic_model.py"/>
     <node name="x360_controller" pkg="kobuki_x360controller" output="screen" type="xbox_controller.py"/>
+    <!-- <node name="keyboard_controller" pkg="kobuki_x360controller" output="screen" type="keyboard_controller.py" launch-prefix="sudo"/> -->
 </launch>
