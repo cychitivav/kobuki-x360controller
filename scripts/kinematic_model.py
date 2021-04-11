@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import rospy
 
 from geometry_msgs.msg import Twist
@@ -41,7 +41,7 @@ class computer():
 
     def callback_vel(self, cmd_vel):
         xiR = np.array([0, 0, 0], dtype=np.float)
-        print cmd_vel, '\n'
+        print(cmd_vel, '\n')
 
         def sign(x): return x/abs(x)
 
