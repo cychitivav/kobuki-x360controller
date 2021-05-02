@@ -7,7 +7,7 @@ from std_msgs.msg import Float64
 import numpy as np
 
 
-class computer():
+class computer:
     def __init__(self):
         # Paremeters
         r = 0.0352
@@ -30,24 +30,23 @@ class computer():
         self.jacobian = np.matmul(np.linalg.pinv(J2), J1)
 
         # Subscriber
-        self.cmd_vel_subscriptor = rospy.Subscriber(
-            '/cmd_vel', Twist, self.callback_vel)
+        self.cmd_vel_subscriptor = rospy.Subscriber('/cmd_vel', Twist, self.callback_velocity)
 
         # Publishers
-        self.pub_wheel_right = rospy.Publisher(
-            '/right_wheel_ctrl/command', Float64, queue_size=10)
-        self.pub_wheel_left = rospy.Publisher(
-            '/left_wheel_ctrl/command', Float64, queue_size=10)
+        self.pub_wheel_right = rospy.Publisher('/right_wheel_ctrl/command', Float64, queue_size=10)
+        self.pub_wheel_left = rospy.Publisher('/left_wheel_ctrl/command', Float64, queue_size=10)
 
-    def callback_vel(self, cmd_vel):
+    def callback_velocity(self, cmd_vel):
         xiR = np.array([0, 0, 0], dtype=np.float)
         print(cmd_vel, '\n')
 
-        def sign(x): return x/abs(x)
+        sign = lambda x:  x/abs(x)
 
+        # Velocity limits
         xiR[0] = cmd_vel.linear.x if abs(cmd_vel.linear.x) <= 1 else sign(cmd_vel.linear.x)
         xiR[1] = cmd_vel.linear.y if abs(cmd_vel.linear.y) <= 1 else sign(cmd_vel.linear.y)
         xiR[2] = cmd_vel.angular.z if abs(cmd_vel.angular.z) <= np.pi else sign(cmd_vel.angular.z)*np.pi
+
 
         phi = np.matmul(self.jacobian, xiR)
 
