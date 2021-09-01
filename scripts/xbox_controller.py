@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 import rospy
 from xbox360controller import Xbox360Controller
 from geometry_msgs.msg  import Twist
